@@ -7,12 +7,12 @@
   <title>Document</title>
 </head>
 <body>
-  <form action="" method="post">
-    email : <input type="email" name="emailid"><br><br>
-    <button type="submit" name="submit">Submit</button><br><br>
-    <?php
-    include 'action.php';
-    ?>
-  </form>
+  <form action="" method="post">  <!--Form created which contains email and a submit button-->
+    email : <input type="email" name="emailid"><br><br>  <!--email input-->
+    <button type="submit" name="submit">Submit</button><br><br>  <!--Submit button-->
+    <?php   //php started
+    include 'action.php';  //copy the code of action.php in index.php
+    ?> 
+  </form> 
 </body>
 </html>

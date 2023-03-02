@@ -28,17 +28,12 @@ class Myclass{
 
     $this->mail->send();
     echo "Sent Successfully";
-
   }
-
 }
 
 if(isset($_POST["submit"])){
     $mail = new PHPMailer(true);
     $myobj = new Myclass($mail);
-    $myobj->myMethod();
-    
+    $myobj->myMethod(); 
 }
-
-
 ?>
