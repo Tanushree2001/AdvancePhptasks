@@ -35,4 +35,49 @@ $img_url = $data['data']['attributes']['uri']['url'];
 echo "<img src='https://ir-dev-d9.innoraft-sites.com$img_url>";
 
 ?>
-<html><
+<html>
+
+$services = array();
+$data_reversed = array_reverse($data['data']);
+$i=0;
+foreach (array_slice($data_reversed, 0, 4) as $service) {
+    $i++;
+    print($i);
+    $uri_url = $service['relationships']['field_image']['links']['related']['href'];
+    $fieldsecondary = $service['attributes']['field_secondary_title']['processed'];
+    $fieldservice = $service['attributes']['field_services']['processed'];
+
+    // fetch the second JSON file using GuzzleHttp
+    $response = $client->get($uri_url);
+    $data = json_decode($response->getBody(), true);
+
+    // extract the image URL from the second JSON file
+    $image_url = $data['data']['attributes']['uri']['url'];
+
+    $services[] = new Service($image_url, $fieldsecondary, $fieldservice);
+}
+
+
+$services = array();
+$data_count = count($data['data']);
+
+for ($i = $data_count - 1; $i >= max($data_count - 4, 0); $i--) {
+  echo ($i);
+  $service = $data['data'][$i];
+  $fieldsecondary = $service['attributes']['field_secondary_title']['processed'];
+  $fieldservice = $service['attributes']['field_services']['processed'];
+  echo $fieldsecondary . "<br>";
+  echo $fieldservice . "<br>";
+
+}
+  $data_reversed = array_reverse($data['data']);
+  foreach (array_slice($data_reversed, 0, 4) as $img) {
+    $uri_url = $img['relationships']['field_image']['links']['related']['href'];
+    // fetch the second JSON file using GuzzleHttp
+    $response = $client->get($uri_url);
+    $data = json_decode($response->getBody(), true);
+    // extract the image URL from the second JSON file
+    $image_url = $data['data']['attributes']['uri']['url'];
+    echo '<img src="https://ir-dev-d9.innoraft-sites.com' . $image_url . '">';
+    echo "<br>";
+}
