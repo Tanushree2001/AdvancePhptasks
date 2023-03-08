@@ -1,83 +1,73 @@
-<?php
-use \GuzzleHttp\Client;
-require_once 'vendor/autoload.php';
-
-$client = new Client(['base_uri' => 'https://ir-dev-d9.innoraft-sites.com/']);
-$page = 0;
-$services = [];
-do {
-    $page++;
-    $response = $client->get('jsonapi/node/services', [
-        'query' => [
-            'page' => [
-                'limit' => 50,
-                'offset' => ($page - 1) * 50,
-            ],
-            
-        ],
-    ]);
-    $data = json_decode($response->getBody(), true);
-    foreach ($data['data'] as $item) {
-        $services[] = $item['attributes']['title'];
-    }
-} while (isset($data['links']['next']));
-
-foreach ($services as $service) {
-    echo $service . '<br>';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<style>
+*, body{
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
 }
-
-
-
-$images = $data['data']['relationships']['field_images']['links']['related']['href'];
-$response = $client->get($images);
-$data = json_decode($response->getBody(), true);
-$img_url = $data['data']['attributes']['uri']['url'];
-echo "<img src='https://ir-dev-d9.innoraft-sites.com$img_url>";
-
-?>
-<html>
-
-$services = array();
-$data_reversed = array_reverse($data['data']);
-$i=0;
-foreach (array_slice($data_reversed, 0, 4) as $service) {
-    $i++;
-    print($i);
-    $uri_url = $service['relationships']['field_image']['links']['related']['href'];
-    $fieldsecondary = $service['attributes']['field_secondary_title']['processed'];
-    $fieldservice = $service['attributes']['field_services']['processed'];
-
-    // fetch the second JSON file using GuzzleHttp
-    $response = $client->get($uri_url);
-    $data = json_decode($response->getBody(), true);
-
-    // extract the image URL from the second JSON file
-    $image_url = $data['data']['attributes']['uri']['url'];
-
-    $services[] = new Service($image_url, $fieldsecondary, $fieldservice);
+.container{
+  max-width: 1300px;
+  margin: 0 auto;
 }
-
-
-$services = array();
-$data_count = count($data['data']);
-
-for ($i = $data_count - 1; $i >= max($data_count - 4, 0); $i--) {
-  echo ($i);
-  $service = $data['data'][$i];
-  $fieldsecondary = $service['attributes']['field_secondary_title']['processed'];
-  $fieldservice = $service['attributes']['field_services']['processed'];
-  echo $fieldsecondary . "<br>";
-  echo $fieldservice . "<br>";
-
+.image_block{
+  width: 50%;
 }
-  $data_reversed = array_reverse($data['data']);
-  foreach (array_slice($data_reversed, 0, 4) as $img) {
-    $uri_url = $img['relationships']['field_image']['links']['related']['href'];
-    // fetch the second JSON file using GuzzleHttp
-    $response = $client->get($uri_url);
-    $data = json_decode($response->getBody(), true);
-    // extract the image URL from the second JSON file
-    $image_url = $data['data']['attributes']['uri']['url'];
-    echo '<img src="https://ir-dev-d9.innoraft-sites.com' . $image_url . '">';
-    echo "<br>";
+.inner_container{
+  width: 100%;
+  margin: 70px;
+  display: flex;
 }
+.content_block{
+  width: 50%;
+  height: 400px;
+}
+.image{
+  height: 400px;
+  width: auto;
+}
+.logo{
+  width: auto;
+  height: 80px;
+  margin: 15px;
+}
+li{
+  font-family: 'ss-semibold';
+  list-style: none;
+  position: relative;
+  padding-left: 24px;
+  margin: 0 0 20px;
+  line-height: 1.4;
+}
+li a{
+  text-decoration: none;
+  color: #4b5561;
+}
+.service-secondary-title {
+  font-size: 3rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-family: "ss-bold";
+}
+.service-title{
+  font-size: 3rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-family: "ss-bold";
+  color: #ff7900;
+}
+</style>
+<body>
+    <section class="container">
+    <?php
+    include("action.php");  ?>
+    </section>
+</body>
+</html>
